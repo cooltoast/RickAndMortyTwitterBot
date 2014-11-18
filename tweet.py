@@ -3,6 +3,7 @@ import tweepy, time, sys
 import json
 import requests
 import random
+import time
 from quotes import getQuotes
 
 def tweetQuote():
@@ -21,5 +22,8 @@ def tweetQuote():
 
 
 if __name__ == '__main__':
-  tweetQuote()
+  while(1):
+    tweetQuote()
+    # tweet again in 20 min
+    time.sleep(60*20)
 
