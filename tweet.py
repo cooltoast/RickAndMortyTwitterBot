@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 import tweepy, time, sys
 import json
 import requests
@@ -23,7 +23,10 @@ def tweetQuote():
 
 if __name__ == '__main__':
   while(1):
-    tweetQuote()
+    try:
+      tweetQuote()
+    except tweepy.TweepError: # dont stop when duplicate status happens
+      continue
     # tweet again in 20 min
     time.sleep(60*20)
 
