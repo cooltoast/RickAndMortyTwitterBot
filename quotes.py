@@ -22,16 +22,14 @@ def getQuotes():
   if not os.path.exists('quotes.pkl'):
     quotes = generateQuotes()
     quotes = cleanUp(quotes)
-    f = open('quotes.pkl', 'w')
-    pickle.dump(quotes, f)
-    f.close()
-    return quotes
+    with open('quotes.pkl', 'w') as f:
+      pickle.dump(quotes, f)
   else:
-    f = open('quotes.pkl', 'r')
-    quotes = pickle.load(f)
-    quotes = cleanUp(quotes)
-    f.close()
-    return quotes
+    with open('quotes.pkl', 'r') as f:
+      quotes = pickle.load(f)
+      quotes = cleanUp(quotes)
+
+  return quotes
 
 if __name__ == '__main__':
   getQuotes()

@@ -4,7 +4,7 @@ import json
 import requests
 import random
 import time
-from quotes import getQuotes
+import quotes as QuoteModule
 
 def tweetQuote():
   data = open('keys.json')
@@ -15,18 +15,28 @@ def tweetQuote():
   auth.set_access_token(keys["access_key"], keys["access_secret"])
   api = tweepy.API(auth)
 
-  quotes = getQuotes()
-  quote = random.choice(quotes)
-  print "tweeted: %s" % quote
-  api.update_status(quote)
+  quotes = QuoteModule.getQuotes()
+  if not quotes:
+    return False
 
+  while (len(quotes) > 0):
+    quote = quotes.pop(random.randint(0, len(quotes)-1))
 
-if __name__ == '__main__':
-  while(1):
-    try:
-      tweetQuote()
-    except tweepy.TweepError: # dont stop when duplicate status happens
+    if type(quote) is not str:
       continue
+
+    try:
+      api.update_status(quote)
+      print "tweeted: %s" % quote
+    except tweepy.TweepError:
+      # dont stop if duplicate status happens
+      continue
+
     # tweet again in 20 min
     time.sleep(60*20)
+
+  return True
+
+if __name__ == '__main__':
+  tweetQuote()
 
